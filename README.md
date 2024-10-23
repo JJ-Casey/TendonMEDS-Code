@@ -14,3 +14,16 @@ __Repository Layout__
     Modular files containing routines and functions to be used within the main R file, `cmdstanr_run.R`
     
 - ./Jess' folder (To be added)
+
+## __Code Citations__
+- [Stan](https://mc-stan.org/)
+
+  Statistical computation software
+
+- [cmdstanr](https://mc-stan.org/cmdstanr/index.html)
+
+  R interface for Stan
+
+- [brms](https://paulbuerkner.com/brms/)
+
+  R interface for Stan
