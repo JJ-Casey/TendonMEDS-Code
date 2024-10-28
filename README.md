@@ -13,7 +13,21 @@ __Repository Layout__
 
     Modular files containing routines and functions to be used within the main R file, `cmdstanr_run.R`
     
-- ./Jess' folder (To be added)
+- ./Data Selection py Files
+
+  Contains the .py files used to run parallel MCMC with and without data selection for individual tendon datasets (in the format of col1=stress, col2=strain).
+
+  - /no-datasel,obsnoise=conjprior,symm-model-XXXX
+
+    Contains the scripts to run the analysis with no data selection, with a conjugate prior on the observational noise variance, using the symmetric model for the tendon microstructural parameters. Data to be analysed should be stored in the "trimmed data" sub-directory. To run analyses, run the "run_all_data.py" script.
+
+  - /run_datasel_obsnoise=val-XXXX
+
+  Includes all scripts to run the analysis, with data selection and a chosen value for the observational noise variance, as defined per the residual analysis. Data to be analysed should be stored in the "trimmed data" sub-directory. To run analyses, run the "run_all_data.py" script.
+
+  - /trimmed_data - ALL
+ 
+  Includes all data sets analysed for the data selection. 
 
 ## __Code Citations__
 - [Stan](https://mc-stan.org/)
