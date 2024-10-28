@@ -23,11 +23,11 @@ __Repository Layout__
 
   - /run_datasel_obsnoise=val-XXXX
 
-  Includes all scripts to run the analysis, with data selection and a chosen value for the observational noise variance, as defined per the residual analysis. Data to be analysed should be stored in the "trimmed data" sub-directory. To run analyses, run the "run_all_data.py" script.
+    Includes all scripts to run the analysis, with data selection and a chosen value for the observational noise variance, as defined per the residual analysis. Data to be analysed should be stored in the "trimmed data" sub-directory. To run analyses, run the "run_all_data.py" script.
 
   - /trimmed_data - ALL
- 
-  Includes all data sets analysed for the data selection. 
+
+    Includes all data sets analysed for the data selection. 
 
 ## __Code Citations__
 - [Stan](https://mc-stan.org/)
