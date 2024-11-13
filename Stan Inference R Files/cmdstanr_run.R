@@ -37,12 +37,14 @@ type_to_infer <- c("sdft") # c("cdet")
 populationData <-
   data %>% filter(type %in% type_to_infer)
 
+# Get the output folder name from the command line
 args <- commandArgs(trailingOnly = T)
 outputFolder <- paste0("./inference output/", args[1])
 dir.create(path = outputFolder,
            recursive = T,
            showWarnings = F)
 
+# Copy this file to the output folder
 file.copy('./cmdstanr_run.R',
           paste0(outputFolder, 'script.R'),
           overwrite = T)
@@ -58,6 +60,7 @@ num_samps <- warmup_iter + sampling_iter
 num_cores <- min(num_chains * num_threads, 16)
 refresh <- 1e2
 
+# Generate Stan Data to feed into cmdstanr
 stan_data <- make_standata(
   pop_model_formula,
   data = populationData,
@@ -66,6 +69,7 @@ stan_data <- make_standata(
   stanvars = stanvars
 )
 
+# Remove extra data, and rename to match modified .stan file
 ids_to_remove <- c(9:21, 23, 26)
 stan_data.edit <-
   stan_data[names(stan_data)[-ids_to_remove]] # Remove unused standata
@@ -76,10 +80,12 @@ source("./modules/init_vals_centred.R")
 inits <-
   get_init_vals.me.nophi.rescaled.st.previous_run(num_chains, num_data)
 
+# Load the modified .stan file
 mod <-
   cmdstan_model(paste0("./cmdstanr_stan_files/", "tendon_me.stan"),
                 force_recompile = F)
 
+# Run the inference and generate samples
 fit <- mod$sample(
   data = stan_data.edit,
   init = inits,
@@ -93,6 +99,7 @@ fit <- mod$sample(
   max_treedepth = 14
 )
 
+## Post-sampling Processing ##
 draws_df <-
   fit$draws(format = "df") %>% select(all_of(starts_with(params)))
 
@@ -105,6 +112,7 @@ rename_group <- function(val) {
   groups[index]
 }
 
+# Helper function to extract samples for output in long format (grouped by experiment label)
 get_grouped_samples <- function(output_df) {
   get_param_samps <- function(param_name) {
     param_samps <- output_df[, grepl(param_name, colnames(output_df))]
@@ -117,6 +125,7 @@ get_grouped_samples <- function(output_df) {
                                                                            sampling_iter * num_chains)) %>% select(group, everything())
 }
 
+## Diagnostic Plots ##
 np <- nuts_params(popFit)
 mcmc_nuts_energy(np) + ggtitle("NUTS Energy Diagnostic")
 
@@ -156,14 +165,17 @@ ggsave(
   height = 3
 )
 
+# Save the processed samples
 write.table(
   get_grouped_samples(draws_df),
   paste0(outputFolder, "output.csv"),
   sep = ",",
   row.names = F
 )
+# Save the raw output
 saveRDS(fit, paste0(outputFolder, "fit.rds"))
 
+# Diagnostics
 fit$summary()
 fit$diagnostic_summary()
 fit$cmdstan_diagnose()
