@@ -12,7 +12,8 @@ __Repository Layout__
   - /modules
 
     Modular files containing routines and functions to be used within the main R file, `cmdstanr_run.R`
-    
+
+  To run the inference with Stan, use `Rscript cmdstanr_run.R ./relative_path_to_output_folder/`. The output folder is automatically created.
 - ./Data Selection py Files
 
   Contains the .py files used to run parallel MCMC with and without data selection for individual tendon datasets (in the format of col1=stress, col2=strain).
